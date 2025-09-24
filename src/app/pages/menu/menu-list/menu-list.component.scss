@@ -1,0 +1,92 @@
+// Contenedor principal de las cartas
+.card-container {
+  display: flex;
+  flex-wrap: wrap; // Permite que las cartas pasen a la siguiente fila si no caben
+  gap: 16px; // Espaciado entre las cartas
+  justify-content: center; // Centra las cartas horizontalmente
+  padding: 16px; // Espaciado interno del contenedor
+}
+
+// Estilos de las cartas
+.card {
+  border: 1px solid #ddd; // Borde neutro
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 10px auto;
+  overflow: hidden;
+  position: relative;
+  background-color: #fff;
+
+  // Icono de advertencia
+  .warning-icon {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffc107; // Amarillo de advertencia
+    color: #fff;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  // Imagen de la carta
+  .card-image {
+    width: 100%;
+    height: auto;
+  }
+
+  // Información de la carta
+  .card-info {
+    padding: 10px;
+
+    h2 {
+      font-size: 18px;
+      margin: 10px 0 5px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #555;
+    }
+  }
+
+  // Botones de la carta
+  .card-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+
+    .btn {
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+
+      // Botón "Ver más"
+      &.btn-view-more {
+        background-color: #007bff; // Azul
+        color: white;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+
+      // Botón "Buy"
+      &.btn-buy {
+        background-color: #28a745; // Verde
+        color: white;
+
+        &:hover {
+          background-color: #1e7e34;
+        }
+      }
+    }
+  }
+}

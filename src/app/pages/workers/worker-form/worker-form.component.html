@@ -1,0 +1,72 @@
+<mat-card class="cardWithShadow theme-card">
+  <mat-card-header>
+    <mat-card-title class="m-b-0">Modificar Trabajador</mat-card-title>
+    <div class="m-t-12">
+      <button mat-flat-button color="primary" class="m-r-8" (click)="guardarWorkerInfo()">Guardar</button>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="b-t-1">
+    <form [formGroup]="form">
+      <div class="row">
+        <!-- Campo Nombre -->
+        <div class="col-lg-6 m-b-16">
+          <mat-label class="f-w-600 m-b-8 d-block">Nombre</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput placeholder="Nombre del trabajador" formControlName="worker_name" />
+          </mat-form-field>
+        </div>
+
+        <!-- Campo Email -->
+        <div class="col-lg-6 m-b-16">
+          <mat-label class="f-w-600 m-b-8 d-block">Email</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput placeholder="Correo electrónico" formControlName="email" />
+          </mat-form-field>
+        </div>
+
+        <!-- Campo Estado -->
+        <div class="col-lg-6 m-b-16">
+          <mat-label class="f-w-600 m-b-8 d-block">Estado</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <mat-select formControlName="worker_status">
+              <mat-option value="Activo">Activo</mat-option>
+              <mat-option value="Inactivo">Inactivo</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Campo Rol -->
+        <div class="col-lg-6 m-b-16">
+          <mat-label class="f-w-600 m-b-8 d-block">Rol</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput placeholder="Rol del trabajador" formControlName="worker_rol" />
+          </mat-form-field>
+        </div>
+
+        <!-- Campo Salario -->
+        <div class="col-lg-6 m-b-16">
+          <mat-label class="f-w-600 m-b-8 d-block">Salario</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput type="number" placeholder="Salario del trabajador" formControlName="salary" />
+          </mat-form-field>
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="col-lg-6 m-b-16">
+          <mat-label class="f-w-600 m-b-8 d-block">Contraseña</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput type="password" placeholder="Contraseña" formControlName="password" />
+          </mat-form-field>
+        </div>
+
+        <!-- Campo Teléfono -->
+        <div class="col-lg-6 m-b-16">
+          <mat-label class="f-w-600 m-b-8 d-block">Teléfono</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <input matInput type="tel" placeholder="Número de teléfono" formControlName="phone_number" />
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,82 @@
+<mat-card class="cardWithShadow theme-card">
+  <mat-card-header>
+    <mat-card-title class="m-b-0">Lista de Ingredientes</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="b-t-1">
+    <!-- Botón para crear nuevo ingrediente arriba -->
+    <div class="mb-3">
+      <button mat-flat-button color="primary" (click)="crearIngrediente()">
+        Crear nuevo ingrediente
+      </button>
+    </div>
+
+    <div *ngIf="ingredientsList.length > 0; else noIngredients" class="table-responsive">
+      <table class="w-100">
+        <thead>
+          <tr>
+            <th class="f-w-t600 f-s-14">Nombre</th>
+            <th class="f-w-t600 f-s-14">Cantidad Disponible</th>
+            <th class="f-w-t600 f-s-14">Cantidad a Sumar</th>
+            <th class="f-w-t600 f-s-14">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let ingredient of ingredientsList; let i = index"
+            class="f-s-14"
+            [ngClass]="{
+              'bg-warning': ingredient.ingredient_cant < 50 && ingredient.ingredient_cant >= 20,
+              'bg-danger': ingredient.ingredient_cant < 20
+            }"
+          >
+            <!-- Nombre del ingrediente -->
+            <td>{{ ingredient.ingredient_name }}</td>
+
+            <!-- Cantidad disponible -->
+            <td>{{ ingredient.ingredient_cant }}</td>
+
+            <!-- Campo para ingresar la cantidad a sumar -->
+            <td>
+              <input
+                type="number"
+                [(ngModel)]="ingredient.amountToAdd"
+                class="quantity-input"
+                min="0"
+                placeholder="Cantidad"
+              />
+            </td>
+
+            <!-- Botones para acciones -->
+            <td>
+              <!-- Botón para aumentar cantidad -->
+              <button mat-button color="primary" class="btn-increase" (click)="updateQuantity(ingredient)">
+                <mat-icon>add</mat-icon>
+                <span>Subir</span>
+              </button>
+
+              <!-- Botón para ver info -->
+              <button mat-button color="accent" class="btn-info" (click)="verInfoIngrediente(ingredient)">
+                <mat-icon>info</mat-icon>
+                <span>Ver info</span>
+              </button>
+
+              <!-- Botón para eliminar ingrediente -->
+              <button mat-button color="warn" class="btn-delete" (click)="confirmDeleteIngredient(ingredient)">
+                <mat-icon>delete</mat-icon>
+                <span>Eliminar</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Template para cuando no hay ingredientes -->
+    <ng-template #noIngredients>
+      <div class="text-center p-4">
+        <h2>No hay ingredientes registrados 😢</h2>
+        <p>¡Agrega nuevos ingredientes para verlos aquí!</p>
+      </div>
+    </ng-template>
+  </mat-card-content>
+</mat-card>
