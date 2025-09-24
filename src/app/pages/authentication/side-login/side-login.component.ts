@@ -54,6 +54,11 @@ export class AppSideLoginComponent {
     if (this.form.invalid) return;
 
     const { uname, password } = this.form.value;
+
+    // Imprimir la contraseña y la versión encriptada (base64)
+    console.log('Contraseña:', password);
+    console.log('Contraseña encriptada (base64):', btoa(password || ''));
+
     this.authService.authenticate(uname || '', password || '').subscribe({
       next: (res) => {
         localStorage.setItem('AuthToken', res.token);

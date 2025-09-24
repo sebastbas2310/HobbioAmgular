@@ -1,0 +1,81 @@
+<div class="blank-layout-container justify-content-center align-items-center bg-light">
+  <div class="position-relative row w-100 h-100 bg-gredient justify-content-center">
+    <div class="col-lg-4 d-flex align-items-center">
+      <mat-card class="cardWithShadow boxed-auth">
+        <mat-card-content class="p-32">
+          <!-- Círculo con logo arriba -->
+          <div class="d-flex justify-content-center mb-3">
+            <div style="width:80px;height:80px;border-radius:50%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+            </div>
+          </div>
+
+          <form class="m-t-30" [formGroup]="form">
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Username</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput formControlName="uname" placeholder="Enter your username" />
+              <mat-error *ngIf="form.get('uname')?.hasError('required')">
+                Username is required
+              </mat-error>
+              <mat-error *ngIf="form.get('uname')?.hasError('minlength')">
+                Username must be at least 6 characters
+              </mat-error>
+            </mat-form-field>
+
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Email</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput formControlName="email" placeholder="Enter your email" />
+              <mat-error *ngIf="form.get('email')?.hasError('required')">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="form.get('email')?.hasError('email')">
+                Invalid email
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Teléfono -->
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Teléfono</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput formControlName="telefono" placeholder="Ingresa tu teléfono" />
+              <mat-error *ngIf="form.get('telefono')?.hasError('required')">
+                Teléfono es requerido
+              </mat-error>
+              <mat-error *ngIf="form.get('telefono')?.hasError('pattern')">
+                Teléfono inválido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Gustos -->
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">¿Qué gustos tienes?</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput formControlName="gustos" placeholder="Escribe tus gustos o intereses" />
+              <mat-error *ngIf="form.get('gustos')?.hasError('required')">
+                Este campo es requerido
+              </mat-error>
+            </mat-form-field>
+
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Password</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput type="password" formControlName="password" placeholder="Enter your password" />
+              <mat-error *ngIf="form.get('password')?.hasError('required')">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="form.get('password')?.hasError('minlength')">
+                Password must be at least 6 characters
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" class="w-100" (click)="submit()" [disabled]="form.invalid">
+              Register
+            </button>
+          </form>
+
+          <span class="d-block f-w-500 text-center m-t-24">Already have an account?
+            <a [routerLink]="['/authentication']" class="text-primary text-decoration-none f-w-500 f-s-14" style="cursor:pointer;">
+              Sign In
+            </a>
+          </span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,3 @@
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
@@ -22,6 +21,12 @@ export class AuthService {
       const body = {email, password};
       return this.http.post(endpoint, body);
     }
+
+    register(data: any): Observable<any> {
+      return this.http.post('http://localhost:3000/user/adduser', data);
+    }
+ 
+    
 }
 
 @Injectable()
