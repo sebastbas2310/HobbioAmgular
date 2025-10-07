@@ -69,7 +69,7 @@ export class AppSideLoginComponent {
           title: 'Error!',
           text: 'Error al iniciar sesión verifica tus credenciales',
           icon: 'error',
-          confirmButtonText: 'Cool',
+          confirmButtonText: 'OK',
         });
         console.log(err);
       },
