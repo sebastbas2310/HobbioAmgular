@@ -15,7 +15,7 @@
                 <div class="d-flex align-items-center">
                   <img src="/assets/images/svgs/google-icon.svg" alt="google" width="16" class="m-r-8" />
                   <span>
-                    Sign in with Google
+                    Iniciar sesión con Google
                   </span>
                 </div>
               </button>
@@ -24,41 +24,41 @@
               <button mat-stroked-button class="w-100 d-flex align-items-center">
                 <div class="d-flex align-items-center">
                   <img src="/assets/images/svgs/facebook-icon.svg" alt="facebook" width="40" class="m-r-4" />
-                  Sign in with FB
+                  Iniciar sesión con Facebook
                 </div>
               </button>
             </div>
           </div>
 
-          <div class="or-border m-t-30">or sign in with</div>
+          <div class="or-border m-t-30">o inicia sesión con</div>
 
           <form class="m-t-30" [formGroup]="form">
-            <!-- Username -->
-            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Username</mat-label>
+            <!-- Email -->
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Correo electrónico</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput formControlName="uname" placeholder="Enter your username" />
+              <input matInput formControlName="uname" placeholder="Ingresa tu correo electrónico" />
               <mat-error *ngIf="form.get('uname')?.hasError('required')">
-                Username is required
+                El correo es obligatorio
               </mat-error>
               <mat-error *ngIf="form.get('uname')?.hasError('minlength')">
-                Username must be at least 6 characters
+                El correo debe tener al menos 6 caracteres
               </mat-error>
             </mat-form-field>
           
             <!-- Password -->
-            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Password</mat-label>
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Contraseña</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput type="password" formControlName="password" placeholder="Enter your password" />
+              <input matInput type="password" formControlName="password" placeholder="Ingresa tu contraseña" />
               <mat-error *ngIf="form.get('password')?.hasError('required')">
-                Password is required
+                La contraseña es obligatoria
               </mat-error>
             </mat-form-field>
           
             <!-- Remember device and forgot password -->
             <div class="d-flex align-items-center m-b-12">
-              <mat-checkbox color="primary">Remember this Device</mat-checkbox>
+              <mat-checkbox color="primary">Recordar este dispositivo</mat-checkbox>
               <a [routerLink]="['/']" class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14">
-                Forgot Password?
+                ¿Olvidaste tu contraseña?
               </a>
             </div>
 
@@ -72,14 +72,14 @@
 
             <!-- Submit button -->
             <button mat-flat-button color="primary" class="w-100" (click)="submit()" [disabled]="form.invalid">
-              Sign In
+              Iniciar sesión
             </button>
           </form>
 
           <!-- input -->
-          <span class="d-block f-w-500 text-center m-t-24">New?
+          <span class="d-block f-w-500 text-center m-t-24">¿Nuevo?
             <a [routerLink]="['/authentication/register']" class="text-decoration-none text-primary f-w-500 f-s-14">
-              Create an account</a>
+              Crea una cuenta</a>
           </span>
         </mat-card-content>
       </mat-card>

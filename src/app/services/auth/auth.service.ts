@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
@@ -11,24 +11,45 @@ import Swal from 'sweetalert2';
 })
 export class AuthService {
 
-  private api_url='http://localhost:3000/auth'
-  
-    constructor(private http: HttpClient) { }
-  
-  
-    authenticate(email:string, password:string): Observable<any>{
-      const endpoint = `${this.api_url}/login`;
-      const body = {email, password};
-      return this.http.post(endpoint, body);
-    }
+  private api_url = 'http://localhost:3000/auth';
 
-    register(data: any): Observable<any> {
-      return this.http.post('http://localhost:3000/user/adduser', data);
-    }
- 
-    
+  constructor(private http: HttpClient) {}
+
+  /**
+   * ✅ Iniciar sesión
+   */
+  authenticate(email: string, password: string): Observable<any> {
+    const endpoint = `${this.api_url}/login`;
+    const body = { email, password };
+    return this.http.post(endpoint, body);
+  }
+
+  /**
+   * ✅ Registrar usuario
+   */
+  register(data: any): Observable<any> {
+    const endpoint = `${this.api_url}/register`;
+    return this.http.post(endpoint, data);
+  }
+
+  /**
+   * ✅ Verificar si un correo ya está registrado
+   */
+  checkEmail(email: string): Observable<boolean> {
+    const endpoint = `${this.api_url}/check-email?email=${encodeURIComponent(email)}`;
+    return this.http.get<{ exists: boolean }>(endpoint).pipe(
+      map(response => response.exists),
+      catchError(() => {
+        console.error('Error verificando el correo');
+        return [false];
+      })
+    );
+  }
 }
 
+/**
+ * ✅ Interceptor para manejar errores de autenticación
+ */
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router) {}

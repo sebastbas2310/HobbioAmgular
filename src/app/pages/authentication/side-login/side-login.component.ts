@@ -67,7 +67,7 @@ export class AppSideLoginComponent {
       error: (err) => {
         Swal.fire({
           title: 'Error!',
-          text: 'Error al iniciar sesión verifica tus credenciales',
+          text: 'Correo o contraseña incorrecta',
           icon: 'error',
           confirmButtonText: 'OK',
         });
