@@ -25,7 +25,25 @@ export class AuthService {
     register(data: any): Observable<any> {
       return this.http.post('http://localhost:3000/user/adduser', data);
     }
- 
+
+    forgotPassword(email: string): Observable<any> {
+      const endpoint = `${this.api_url}/forgot-password`;
+      const body = { email };
+      return this.http.post(endpoint, body);
+    }
+
+    resetPassword(token: string, newPassword: string): Observable<any> {
+      const endpoint = `${this.api_url}/reset-password`;
+      const body = { token, newPassword };
+      return this.http.post(endpoint, body);
+    }
+
+    validateResetToken(token: string): Observable<any> {
+      const endpoint = `${this.api_url}/validate-reset-token`;
+      const body = { token };
+      return this.http.post(endpoint, body);
+    }
+
     
 }
 
