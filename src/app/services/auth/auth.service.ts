@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -12,16 +12,26 @@ import Swal from 'sweetalert2';
 export class AuthService {
 
   private api_url = 'http://localhost:3000/auth';
+  private user_url = 'http://localhost:3000/users';
 
   constructor(private http: HttpClient) {}
 
   /**
-   * ✅ Iniciar sesión
+   * ✅ Iniciar sesión y guardar token
    */
   authenticate(email: string, password: string): Observable<any> {
     const endpoint = `${this.api_url}/login`;
     const body = { email, password };
-    return this.http.post(endpoint, body);
+
+    return this.http.post(endpoint, body).pipe(
+      map((response: any) => {
+        if (response && response.token) {
+          localStorage.setItem('authToken', response.token);
+        }
+        return response;
+      }),
+      catchError(this.handleError)
+    );
   }
 
   /**
@@ -29,7 +39,7 @@ export class AuthService {
    */
   register(data: any): Observable<any> {
     const endpoint = `${this.api_url}/register`;
-    return this.http.post(endpoint, data);
+    return this.http.post(endpoint, data).pipe(catchError(this.handleError));
   }
 
   /**
@@ -39,31 +49,114 @@ export class AuthService {
     const endpoint = `${this.api_url}/check-email?email=${encodeURIComponent(email)}`;
     return this.http.get<{ exists: boolean }>(endpoint).pipe(
       map(response => response.exists),
-      catchError(() => {
-        console.error('Error verificando el correo');
-        return [false];
-      })
+      catchError(() => [false])
     );
+  }
+
+  /**
+   * ✅ Obtener token guardado
+   */
+  getToken(): string | null {
+    return localStorage.getItem('authToken');
+  }
+
+  /**
+   * ✅ Decodificar token y obtener datos del usuario
+   */
+  getUserFromToken(): any | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded;
+    } catch (error) {
+      console.error('Error decoding token', error);
+      return null;
+    }
+  }
+
+  /**
+   * ✅ Obtener ID del usuario desde el token
+   */
+  getUserIdFromToken(): string | null {
+    const decoded = this.getUserFromToken();
+    return decoded ? decoded.id || decoded.user_id || null : null;
+  }
+
+  /**
+   * ✅ Obtener perfil del usuario desde el backend (GET /users/:id)
+   */
+  getUserById(userId: string): Observable<any> {
+    const endpoint = `${this.user_url}/${userId}`;
+    return this.http.get<any>(endpoint).pipe(catchError(this.handleError));
+  }
+
+  /**
+   * ✅ Actualizar perfil del usuario (PUT /users/:id)
+   */
+  updateUser(userId: string, data: any): Observable<any> {
+    const endpoint = `${this.user_url}/${userId}`;
+    return this.http.put<any>(endpoint, data).pipe(catchError(this.handleError));
+  }
+
+  /**
+   * ✅ Obtener perfil de usuario
+   */
+  getUserProfile(userId: string) {
+    return this.http.get<any>(`/api/users/${userId}`);
+  }
+
+  /**
+   * ✅ Actualizar perfil de usuario
+   */
+  updateUserProfile(userId: string, data: any) {
+    return this.http.put<any>(`/api/users/${userId}`, data);
+  }
+
+  /**
+   * ✅ Cerrar sesión
+   */
+  logout(): void {
+    localStorage.removeItem('authToken');
+  }
+
+  /**
+   * ⚠️ Manejo de errores HTTP
+   */
+  private handleError(error: HttpErrorResponse) {
+    console.error('Error HTTP:', error);
+    return throwError(() => error);
   }
 }
 
 /**
- * ✅ Interceptor para manejar errores de autenticación
+ * ✅ Interceptor para manejar autenticación y errores 401
  */
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(req).pipe(
+    const token = localStorage.getItem('authToken');
+    let request = req;
+
+    if (token) {
+      request = req.clone({
+        setHeaders: { Authorization: `Bearer ${token}` }
+      });
+    }
+
+    return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           Swal.fire({
-            title: 'Sesión Expirada',
+            title: 'Sesión expirada',
             text: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
             icon: 'warning',
             confirmButtonText: 'Aceptar'
           }).then(() => {
+            localStorage.removeItem('authToken');
             this.router.navigate(['/authentication']);
           });
         }

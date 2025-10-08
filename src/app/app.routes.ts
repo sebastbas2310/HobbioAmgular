@@ -37,6 +37,16 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/tables/table.routes').then((m) => m.tablesRoutes),
       },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./pages/settings/Settings.routes').then((m) => m.SettingsRoutes),
+      },
+      {
+        path: 'profile',
+        loadChildren: () =>
+          import('./pages/profile/Profile.routes').then((m) => m.ProfileRoutes),
+      },
     ],
   },
   {
