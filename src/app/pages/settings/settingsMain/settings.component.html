@@ -11,7 +11,7 @@
   </aside>
 
   <!-- Main Content -->
-  <section class="settings-content">
+  <section class="settings-content" *ngIf="profileForm">
     <h3>Edit Profile</h3>
 
     <div class="profile-card" style="position: relative;">
@@ -27,12 +27,12 @@
       </button>
 
       <img
-        [src]="profileForm.value.profile_img || 'assets/images/avatar.png'"
+        [src]="profileForm?.value.profile_img || 'assets/images/avatar.png'"
         alt="User avatar"
         class="profile-avatar"
       />
       <div class="profile-info">
-        <h4>{{ profileForm.value.user_name || 'User' }}</h4>
+        <h4>{{ profileForm?.value.user_name || 'User' }}</h4>
         <button class="btn-secondary" type="button" (click)="onUploadPhoto()">
           Change Photo
         </button>

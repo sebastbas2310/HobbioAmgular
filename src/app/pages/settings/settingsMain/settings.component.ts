@@ -29,23 +29,17 @@ export class SettingsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const token = this.authService.getToken(); // O localStorage.getItem('token')
-    if (token) {
-      const decoded: any = jwtDecode(token);
-      const userId = decoded.user_id || decoded.id || decoded.sub; // Ajusta según tu payload
+    // Inicializa el formulario ANTES de cualquier petición asíncrona
+    this.profileForm = this.fb.group({
+      user_name: [''],
+      email: [''],
+      phone_number: [''],
+      things_like: [''],
+      profile_img: [''],
+    });
 
-      // Ahora pide los datos al backend
-      this.authService.getUserProfile(userId).subscribe({
-        next: (userData) => {
-          this.profileForm.patchValue(userData);
-          this.loading = false;
-        },
-        error: (err) => {
-          this.loading = false;
-          // Maneja el error
-        }
-      });
-    }
+    // Luego puedes cargar los datos del usuario y hacer patchValue
+    this.loadUserData();
   }
 
   /**
