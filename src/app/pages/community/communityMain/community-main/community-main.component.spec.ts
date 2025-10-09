@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenuBuyComponent } from './menu-buy.component';
+import { CommunityMainComponent } from './community-main.component';
 
-describe('MenuBuyComponent', () => {
-  let component: MenuBuyComponent;
-  let fixture: ComponentFixture<MenuBuyComponent>;
+describe('CommunityMainComponent', () => {
+  let component: CommunityMainComponent;
+  let fixture: ComponentFixture<CommunityMainComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MenuBuyComponent]
+      imports: [CommunityMainComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MenuBuyComponent);
+    fixture = TestBed.createComponent(CommunityMainComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

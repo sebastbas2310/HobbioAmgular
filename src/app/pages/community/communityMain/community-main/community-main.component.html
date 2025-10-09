@@ -1,0 +1,28 @@
+<div class="page-wrap">
+  <!-- Barra de búsqueda -->
+  <div class="search-container">
+    <div class="search-bar">
+      <span class="icon">🔍</span>
+      <input
+        type="text"
+        placeholder="busca comunidades que te gusten o compartan tus gustos..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </div>
+  </div>
+
+  <!-- Encabezado -->
+  <div class="header-text">
+    <h1>¡Hola <span class="user">Marcus_La_Rubia</span> 👋!</h1>
+    <p>Mira las mejores comunidades de hobbio</p>
+  </div>
+
+  <!-- Cuadrícula de comunidades -->
+  <div class="grid">
+    <div class="card" *ngFor="let c of filtradas">
+      <h3>{{ c.nombre }}</h3>
+      <p><strong>Descripción:</strong> los miembros de esta comunidad sienten mucho amor por {{ c.descripcion.split('por ')[1] || 'su pasión' }}.</p>
+    </div>
+  </div>
+</div>
