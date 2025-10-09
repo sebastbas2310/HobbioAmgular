@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';  // 👈 necesario para *ngFor
+import { FormsModule } from '@angular/forms';    // 👈 necesario para [(ngModel)]
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 interface Comunidad {
@@ -9,6 +11,8 @@ interface Comunidad {
 
 @Component({
   selector: 'app-comunidades',
+  standalone: true,  // 👈 si estás usando componentes standalone
+  imports: [CommonModule, FormsModule], // 👈 agrega estos módulos aquí
   templateUrl: './community-main.component.html',
   styleUrls: ['./community-main.component.scss']
 })
