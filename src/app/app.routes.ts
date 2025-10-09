@@ -30,16 +30,6 @@ export const routes: Routes = [
           import('./pages/chat/chatMain/chat.routes').then((m) => m.ChatRoutes),
       },
       {
-        path: 'ingredients',
-        loadChildren: () =>
-          import('./pages/ingredients/ingredientsroutes').then((m) => m.ingredientsRoutes),
-      },
-      {
-        path: 'tables',
-        loadChildren: () =>
-          import('./pages/tables/table.routes').then((m) => m.tablesRoutes),
-      },
-      {
         path: 'settings',
         loadChildren: () =>
           import('./pages/settings/Settings.routes').then((m) => m.SettingsRoutes),

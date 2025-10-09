@@ -1,1 +1,22 @@
-<p>chat-main works!</p>
+<div class="friends-container">
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Busca a tus amigos favoritos"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange($event)"
+    />
+    <span class="icon">🔍</span>
+  </div>
+
+  <div class="friends-list">
+    <div class="friend-card" *ngFor="let amigo of filtrados">
+      <img [src]="amigo.imagen" alt="foto" class="avatar" />
+      <div class="info">
+        <h2>{{ amigo.nombre }}</h2>
+        <p class="mensaje">{{ amigo.mensaje }}</p>
+      </div>
+      <span class="estado">{{ amigo.estado }}</span>
+    </div>
+  </div>
+</div>

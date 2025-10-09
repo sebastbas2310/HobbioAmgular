@@ -1,0 +1,82 @@
+.friends-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.search-bar {
+  position: relative;
+  margin-bottom: 2rem;
+  text-align: center;
+
+  input {
+    width: 100%;
+    border: 1px solid #000;
+    border-radius: 50px;
+    padding: 0.8rem 2.5rem;
+    font-size: 1rem;
+    text-align: center;
+    outline: none;
+  }
+
+  .icon {
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    font-size: 1.2rem;
+  }
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.friend-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #dde4ff;
+  border-radius: 30px;
+  padding: 0.8rem 1.2rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .avatar {
+    width: 65px;
+    height: 65px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-right: 1rem;
+  }
+
+  .info {
+    flex: 1;
+
+    h2 {
+      font-size: 1.2rem;
+      margin: 0;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .mensaje {
+      margin: 0.2rem 0 0 0;
+      font-size: 0.95rem;
+      color: #222;
+    }
+  }
+
+  .estado {
+    font-size: 0.85rem;
+    color: #444;
+    white-space: nowrap;
+  }
+}
