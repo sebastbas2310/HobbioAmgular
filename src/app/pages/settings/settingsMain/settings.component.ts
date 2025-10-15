@@ -22,6 +22,7 @@ export class SettingsComponent implements OnInit {
   profileForm!: FormGroup;
   editMode = false;
   loading = true;
+  userName: string = ''; // 👈 guardaremos el nombre aquí
 
   constructor(
     private fb: FormBuilder,
@@ -29,7 +30,7 @@ export class SettingsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Inicializa el formulario ANTES de cualquier petición asíncrona
+    // Inicializa el formulario
     this.profileForm = this.fb.group({
       user_name: [''],
       email: [''],
@@ -38,7 +39,6 @@ export class SettingsComponent implements OnInit {
       profile_img: [''],
     });
 
-    // Luego puedes cargar los datos del usuario y hacer patchValue
     this.loadUserData();
   }
 
@@ -54,13 +54,21 @@ export class SettingsComponent implements OnInit {
       return;
     }
 
-    this.authService.getUserProfile(user.id).subscribe({
+    console.log('🟢 ID del usuario decodificado:', user.id);
+
+    this.authService.getUserById(user.id).subscribe({
       next: (userData) => {
+        // Pone los datos en el formulario
         this.profileForm.patchValue(userData);
+
+        // Guarda y muestra el nombre
+        this.userName = userData.user_name;
+        console.log('👤 Nombre del usuario:', this.userName);
+
         this.loading = false;
       },
       error: (err) => {
-        console.error('Error cargando usuario:', err);
+        console.error('⚠️ Error cargando usuario:', err);
         this.loading = false;
       }
     });
@@ -73,6 +81,7 @@ export class SettingsComponent implements OnInit {
     this.editMode = !this.editMode;
   }
 
+  
   /**
    * ✅ Guardar cambios
    */
@@ -85,7 +94,7 @@ export class SettingsComponent implements OnInit {
       return;
     }
 
-    this.authService.updateUserProfile(user.id as string, this.profileForm.value).subscribe({
+    this.authService.updateUser(user.id as string, this.profileForm.value).subscribe({
       next: (res) => {
         Swal.fire('Éxito', 'Perfil actualizado correctamente', 'success');
         this.editMode = false;

@@ -1,4 +1,12 @@
-import { HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpHeaders,
+  HttpInterceptor,
+  HttpRequest
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -10,9 +18,8 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root'
 })
 export class AuthService {
-
   private api_url = 'http://localhost:3000/auth';
-  private user_url = 'http://localhost:3000/users';
+  private user_url = 'http://localhost:3000/user';
 
   constructor(private http: HttpClient) {}
 
@@ -68,8 +75,7 @@ export class AuthService {
     if (!token) return null;
 
     try {
-      const decoded: any = jwtDecode(token);
-      return decoded;
+      return jwtDecode(token);
     } catch (error) {
       console.error('Error decoding token', error);
       return null;
@@ -85,33 +91,52 @@ export class AuthService {
   }
 
   /**
-   * ✅ Obtener perfil del usuario desde el backend (GET /users/:id)
+   * ✅ Obtener perfil del usuario (GET /user/:id)
    */
   getUserById(userId: string): Observable<any> {
-    const endpoint = `${this.user_url}/${userId}`;
-    return this.http.get<any>(endpoint).pipe(catchError(this.handleError));
+    const token = this.getToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<any>(`${this.user_url}/${userId}`, { headers });
   }
 
   /**
-   * ✅ Actualizar perfil del usuario (PUT /users/:id)
+ * ✅ Cambiar contraseña del usuario (PUT /user/:id/change-password)
+ */
+changePassword(currentPassword: string, newPassword: string): Observable<any> {
+  const userId = this.getUserIdFromToken();
+  const token = this.getToken();
+
+  if (!userId || !token) {
+    return throwError(() => new Error('Usuario no autenticado'));
+  }
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  const body = { currentPassword, newPassword };
+
+  return this.http
+    .put(`${this.user_url}/${userId}/change-password`, body, { headers })
+    .pipe(catchError(this.handleError));
+}
+
+
+  /**
+   * ✅ Actualizar perfil del usuario (PUT /user/:id)
    */
   updateUser(userId: string, data: any): Observable<any> {
-    const endpoint = `${this.user_url}/${userId}`;
-    return this.http.put<any>(endpoint, data).pipe(catchError(this.handleError));
-  }
+    const token = this.getToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-  /**
-   * ✅ Obtener perfil de usuario
-   */
-  getUserProfile(userId: string) {
-    return this.http.get<any>(`/api/users/${userId}`);
-  }
-
-  /**
-   * ✅ Actualizar perfil de usuario
-   */
-  updateUserProfile(userId: string, data: any) {
-    return this.http.put<any>(`/api/users/${userId}`, data);
+    return this.http.put<any>(`${this.user_url}/${userId}/change-password`, data, { headers })
+      .pipe(catchError(this.handleError));
   }
 
   /**

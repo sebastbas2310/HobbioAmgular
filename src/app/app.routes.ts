@@ -1,8 +1,7 @@
 import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
-import { CommunityRoutes } from './pages/community/community.routes';
-import { ChatMainComponent } from './pages/chat/chatMain/chat-main/chat-main/chat-main.component';
+
 
 export const routes: Routes = [
   {
@@ -28,16 +27,6 @@ export const routes: Routes = [
         path: 'chat',
         loadChildren: () =>
           import('./pages/chat/chatMain/chat.routes').then((m) => m.ChatRoutes),
-      },
-      {
-        path: 'ingredients',
-        loadChildren: () =>
-          import('./pages/ingredients/ingredientsroutes').then((m) => m.ingredientsRoutes),
-      },
-      {
-        path: 'tables',
-        loadChildren: () =>
-          import('./pages/tables/table.routes').then((m) => m.tablesRoutes),
       },
       {
         path: 'settings',

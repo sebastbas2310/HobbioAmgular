@@ -36,7 +36,7 @@ export class HeaderComponent {
   }
 
   settings(): void {
-    this.router.navigate(['/settings']); 
+    this.router.navigate(['/settings/profile']); 
   }
 
   profile(): void {
