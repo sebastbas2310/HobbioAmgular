@@ -42,8 +42,8 @@ export class AppForgotPasswordComponent {
       next: (res) => {
         this.isLoading = false;
         Swal.fire({
-          title: '¡Correo enviado!',
-          text: 'Se ha enviado un enlace de recuperación a tu correo electrónico. Revisa tu bandeja de entrada y spam.',
+          title: 'Solicitud enviada',
+          text: 'Si el correo está asociado a una cuenta, se enviará un enlace de recuperación.',
           icon: 'success',
           confirmButtonText: 'Entendido',
         }).then(() => {
@@ -53,8 +53,8 @@ export class AppForgotPasswordComponent {
       error: (err) => {
         this.isLoading = false;
         Swal.fire({
-          title: 'Error!',
-          text: 'No se pudo enviar el correo de recuperación. Verifica que el correo esté registrado.',
+          title: 'Error',
+          text: 'No se pudo procesar la solicitud. Intenta nuevamente.',
           icon: 'error',
           confirmButtonText: 'OK',
         });

@@ -34,7 +34,6 @@ export class AppResetPasswordComponent implements OnInit {
   token: string = '';
   isLoading = false;
   isValidToken = false;
-  tokenValidated = false;
 
   get f() {
     return this.form.controls;
@@ -45,40 +44,29 @@ export class AppResetPasswordComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
       if (this.token) {
-        this.validateToken();
+        // Asumimos que el token es válido y mostramos el formulario
+        // La validación real se hace al intentar restablecer la contraseña
+        this.isValidToken = true;
       } else {
-        Swal.fire({
-          title: 'Token inválido',
-          text: 'El enlace de recuperación no es válido o ha expirado.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        }).then(() => {
-          this.router.navigate(['/authentication']);
-        });
+        this.showExpiredLinkMessage();
       }
     });
   }
 
-  validateToken() {
-    this.isLoading = true;
-    this.authService.validateResetToken(this.token).subscribe({
-      next: (res) => {
-        this.isLoading = false;
-        this.isValidToken = true;
-        this.tokenValidated = true;
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.tokenValidated = true;
-        Swal.fire({
-          title: 'Token inválido',
-          text: 'El enlace de recuperación no es válido o ha expirado.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        }).then(() => {
-          this.router.navigate(['/authentication']);
-        });
-      },
+  showExpiredLinkMessage() {
+    Swal.fire({
+      title: 'Enlace expirado',
+      text: 'El enlace de recuperación ha expirado. Por favor, inicia el proceso de recuperación nuevamente.',
+      icon: 'warning',
+      confirmButtonText: 'Iniciar proceso de nuevo',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['/authentication/forgot-password']);
+      } else {
+        this.router.navigate(['/authentication']);
+      }
     });
   }
 
@@ -104,8 +92,8 @@ export class AppResetPasswordComponent implements OnInit {
       next: (res) => {
         this.isLoading = false;
         Swal.fire({
-          title: '¡Contraseña actualizada!',
-          text: 'Tu contraseña ha sido restablecida exitosamente. Ya puedes iniciar sesión con tu nueva contraseña.',
+          title: 'Contraseña actualizada con éxito',
+          text: 'Tu contraseña ha sido restablecida exitosamente.',
           icon: 'success',
           confirmButtonText: 'Iniciar sesión',
         }).then(() => {
@@ -114,12 +102,17 @@ export class AppResetPasswordComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        Swal.fire({
-          title: 'Error!',
-          text: 'No se pudo restablecer la contraseña. El enlace puede haber expirado.',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        if (err.status === 400 || err.status === 410) {
+          // Token expirado o inválido
+          this.showExpiredLinkMessage();
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudo restablecer la contraseña. Intenta nuevamente.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }
         console.log(err);
       },
     });

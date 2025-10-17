@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class AuthService {
 
-  private api_url='http://localhost:3000/auth'
+  private api_url='http://localhost:3000/api/v1/auth'
   
     constructor(private http: HttpClient) { }
   
@@ -35,12 +35,6 @@ export class AuthService {
     resetPassword(token: string, newPassword: string): Observable<any> {
       const endpoint = `${this.api_url}/reset-password`;
       const body = { token, newPassword };
-      return this.http.post(endpoint, body);
-    }
-
-    validateResetToken(token: string): Observable<any> {
-      const endpoint = `${this.api_url}/validate-reset-token`;
-      const body = { token };
       return this.http.post(endpoint, body);
     }
 
