@@ -21,33 +21,16 @@ export class AuthService {
   private api_url = 'http://localhost:3000/auth';
   private user_url = 'http://localhost:3000/user';
 
-  constructor(private http: HttpClient) {}
-
-  /**
-   * ✅ Iniciar sesión y guardar token
-   */
-  authenticate(email: string, password: string): Observable<any> {
-    const endpoint = `${this.api_url}/login`;
-    const body = { email, password };
-
-    return this.http.post(endpoint, body).pipe(
-      map((response: any) => {
-        if (response && response.token) {
-          localStorage.setItem('authToken', response.token);
-        }
-        return response;
-      }),
-      catchError(this.handleError)
-    );
-  }
-
-  /**
-   * ✅ Registrar usuario
-   */
-  register(data: any): Observable<any> {
-    const endpoint = `${this.api_url}/register`;
-    return this.http.post(endpoint, data).pipe(catchError(this.handleError));
-  }
+  private api_url='http://localhost:3000/api/v1/auth'
+  
+    constructor(private http: HttpClient) { }
+  
+  
+    authenticate(email:string, password:string): Observable<any>{
+      const endpoint = `${this.api_url}/login`;
+      const body = {email, password};
+      return this.http.post(endpoint, body);
+    }
 
   /**
    * ✅ Verificar si un correo ya está registrado
@@ -80,49 +63,20 @@ export class AuthService {
       console.error('Error decoding token', error);
       return null;
     }
-  }
 
-  /**
-   * ✅ Obtener ID del usuario desde el token
-   */
-  getUserIdFromToken(): string | null {
-    const decoded = this.getUserFromToken();
-    return decoded ? decoded.id || decoded.user_id || null : null;
-  }
+    forgotPassword(email: string): Observable<any> {
+      const endpoint = `${this.api_url}/forgot-password`;
+      const body = { email };
+      return this.http.post(endpoint, body);
+    }
 
-  /**
-   * ✅ Obtener perfil del usuario (GET /user/:id)
-   */
-  getUserById(userId: string): Observable<any> {
-    const token = this.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+    resetPassword(token: string, newPassword: string): Observable<any> {
+      const endpoint = `${this.api_url}/reset-password`;
+      const body = { token, newPassword };
+      return this.http.post(endpoint, body);
+    }
 
-    return this.http.get<any>(`${this.user_url}/${userId}`, { headers });
-  }
-
-  /**
- * ✅ Cambiar contraseña del usuario (PUT /user/:id/change-password)
- */
-changePassword(currentPassword: string, newPassword: string): Observable<any> {
-  const userId = this.getUserIdFromToken();
-  const token = this.getToken();
-
-  if (!userId || !token) {
-    return throwError(() => new Error('Usuario no autenticado'));
-  }
-
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  });
-
-  const body = { currentPassword, newPassword };
-
-  return this.http
-    .put(`${this.user_url}/${userId}/change-password`, body, { headers })
-    .pipe(catchError(this.handleError));
+    
 }
 
 
