@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
+import { ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -22,16 +20,57 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class AppSideRegisterComponent {
   form = new FormGroup({
     uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    status: new FormControl('active', [Validators.required]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    verificarPassword: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
     telefono: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{7,15}$')]),
     gustos: new FormControl('', [Validators.required]),
   });
 
+  emailYaRegistrado = false;
+  errorMsg: string = '';
+
   constructor(private router: Router, private authService: AuthService) {}
 
+  // ✅ Verificar si las contraseñas son iguales
+  passwordsIguales(): boolean {
+    const password = this.form.get('password')?.value;
+    const verificarPassword = this.form.get('verificarPassword')?.value;
+    return password === verificarPassword;
+  }
+
+  // ✅ Detectar si el error viene por correo ya registrado
+  correoYaRegistrado(err: any): boolean {
+    const msg = err?.error?.error || err?.error?.message || err?.message || '';
+    return (
+      msg.toLowerCase().includes('correo ya está registrado') ||
+      msg.toLowerCase().includes('el correo ya está registrado') ||
+      msg.toLowerCase().includes('email ya está registrado')
+    );
+  }
+
+  // ✅ Enviar el formulario
   submit() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      Swal.fire({
+        title: 'Formulario inválido',
+        text: 'Por favor completa todos los campos correctamente.',
+        icon: 'warning',
+        confirmButtonText: 'Ok',
+      });
+      return;
+    }
+
+    if (!this.passwordsIguales()) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Las contraseñas no coinciden.',
+        icon: 'error',
+        confirmButtonText: 'Ok',
+      });
+      return;
+    }
 
     const { uname, password, email, telefono, gustos } = this.form.value;
 
@@ -55,14 +94,43 @@ export class AppSideRegisterComponent {
         });
       },
       error: (err) => {
-        Swal.fire({
-          title: 'Error!',
-          text: 'No se pudo registrar el usuario',
-          icon: 'error',
-          confirmButtonText: 'Ok',
-        });
-        console.log(err);
+        console.error('Error al registrar:', err);
+
+        if (this.correoYaRegistrado(err)) {
+          this.emailYaRegistrado = true;
+          Swal.fire({
+            title: 'Correo ya registrado',
+            text: 'El correo electrónico ingresado ya está asociado a una cuenta existente.',
+            icon: 'warning',
+            confirmButtonText: 'Ok',
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: err?.error?.error || 'No se pudo registrar el usuario.',
+            icon: 'error',
+            confirmButtonText: 'Ok',
+          });
+        }
       }
+    });
+  }
+
+  // ✅ Verificar correo antes de registrar (opcional)
+  verificarCorreo() {
+    const email = this.form.get('email')?.value;
+    if (!email) return;
+
+    this.authService.checkEmail(email).subscribe({
+      next: (exists) => {
+        if (exists) {
+          this.emailYaRegistrado = true;
+          this.form.get('email')?.setErrors({ emailRegistrado: true });
+        } else {
+          this.emailYaRegistrado = false;
+        }
+      },
+      error: (err) => console.error(err)
     });
   }
 }

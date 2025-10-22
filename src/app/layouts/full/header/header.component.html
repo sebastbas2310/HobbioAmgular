@@ -25,21 +25,21 @@
     <img src="/assets/images/profile/user-1.jpg" class="rounded-circle object-cover d-block" width="35" />
   </button>
   <mat-menu #profilemenu="matMenu" class="cardWithShadow topbar-dd">
-    <button mat-menu-item>
-      <mat-icon class="d-flex align-items-center"><i-tabler name="user" class="icon-18 d-flex"></i-tabler></mat-icon>My
-      Profile
+    <button mat-menu-item (click)="profile()">
+      <mat-icon class="d-flex align-items-center"><i-tabler name="user" class="icon-18 d-flex"></i-tabler></mat-icon>Mi
+      Perfil
     </button>
-    <button mat-menu-item>
-      <mat-icon class="d-flex align-items-center"><i-tabler name="mail" class="icon-18 d-flex"></i-tabler></mat-icon>My
-      Account
+    <button mat-menu-item (click)="notifications()">
+      <mat-icon class="d-flex align-items-center"><i-tabler name="mail" class="icon-18 d-flex"></i-tabler></mat-icon>Mis
+      Notificaciones
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="settings()">
       <mat-icon class="d-flex align-items-center"><i-tabler name="list-check"
-          class="icon-18 d-flex"></i-tabler></mat-icon>My Task
+          class="icon-18 d-flex"></i-tabler></mat-icon>configuración
     </button>
 
     <div class="p-x-12 m-t-12">
-  <button mat-stroked-button class="w-100" (click)="logout()">Logout</button>
+  <button mat-stroked-button class="w-100" (click)="logout()">Cerrar sesión</button>
   </div>
   </mat-menu>
 </mat-toolbar>

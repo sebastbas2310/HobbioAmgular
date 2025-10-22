@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 
+
 export const routes: Routes = [
   {
     path: '',
@@ -18,24 +19,24 @@ export const routes: Routes = [
           import('./pages/pages.routes').then((m) => m.PagesRoutes),
       },
       {
-        path: 'workers',
+        path: 'community',
         loadChildren: () =>
-          import('./pages/workers/workers.routes').then((m) => m.TrabajadoresRoutes),
+          import('./pages/community/community.routes').then((m) => m.CommunityRoutes),
       },
       {
-        path: 'menu',
+        path: 'chat',
         loadChildren: () =>
-          import('./pages/menu/Menu.routes').then((m) => m.MenuRoutes),
+          import('./pages/chat/chatMain/chat.routes').then((m) => m.ChatRoutes),
       },
       {
-        path: 'ingredients',
+        path: 'settings',
         loadChildren: () =>
-          import('./pages/ingredients/ingredientsroutes').then((m) => m.ingredientsRoutes),
+          import('./pages/settings/Settings.routes').then((m) => m.SettingsRoutes),
       },
       {
-        path: 'tables',
+        path: 'profile',
         loadChildren: () =>
-          import('./pages/tables/table.routes').then((m) => m.tablesRoutes),
+          import('./pages/profile/Profile.routes').then((m) => m.ProfileRoutes),
       },
     ],
   },

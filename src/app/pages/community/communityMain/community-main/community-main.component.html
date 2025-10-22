@@ -1,0 +1,37 @@
+<div class="page-wrap">
+  <!-- 🔍 Barra de búsqueda -->
+  <div class="search-container">
+    <div class="search-bar">
+      <span class="icon" aria-hidden="true">🔍</span>
+      <input
+        type="text"
+        placeholder="Busca comunidades que te gusten o compartan tus intereses..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+        aria-label="Buscar comunidades"
+      />
+    </div>
+  </div>
+
+  <!-- 👋 Encabezado -->
+  <div class="header-text">
+    <h1>¡Hola <span class="user">Marcus_La_Rubia</span> 👋!</h1>
+    <p>Mira las mejores comunidades de Hobbio</p>
+  </div>
+
+  <!-- 🧩 Cuadrícula de comunidades -->
+  <div class="grid">
+    <div class="card" *ngFor="let c of filtradas">
+      <h3>{{ c.nombre }}</h3>
+      <p>
+        <strong>Descripción:</strong>
+        {{ c.descripcion }}
+      </p>
+    </div>
+
+    <!-- Mensaje si no hay resultados -->
+    <div class="no-results" *ngIf="filtradas.length === 0">
+      <p>No se encontraron comunidades que coincidan con tu búsqueda.</p>
+    </div>
+  </div>
+</div>

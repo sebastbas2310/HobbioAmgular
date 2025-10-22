@@ -32,6 +32,18 @@ export class HeaderComponent {
 
   logout(): void {
     localStorage.removeItem('AuthToken');
-    this.router.navigate(['/authentication']); // o la ruta que uses para login
+    this.router.navigate(['/authentication']); 
+  }
+
+  settings(): void {
+    this.router.navigate(['/settings/profile']); 
+  }
+
+  profile(): void {
+    this.router.navigate(['/profile']); 
+  }
+
+  notifications(): void {
+    this.router.navigate(['/notifications']); 
   }
 }
