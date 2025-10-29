@@ -62,7 +62,7 @@ export class AppSideLoginComponent {
     this.authService.authenticate(uname || '', password || '').subscribe({
       next: (res) => {
         localStorage.setItem('AuthToken', res.token);
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         Swal.fire({
