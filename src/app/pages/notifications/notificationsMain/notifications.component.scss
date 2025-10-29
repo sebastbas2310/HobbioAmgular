@@ -1,0 +1,128 @@
+/* Notificaciones — estilo limpio y full-bleed white similar al chat */
+
+:root{
+  --bg: #ffffff;
+  --muted: #8b95a3;
+  --accent: #2d89ff;
+  --card-border: #eef2f7;
+}
+
+/* Root ocupa todo el espacio disponible (si integrado en layout full-bleed) */
+.notif-root {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+/* Header */
+.notif-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.notif-header .left { display:flex; align-items:center; gap:12px; }
+.notif-header h2 { margin:0; font-size:1.25rem; color:#0f172a; }
+.badge {
+  background:#ef4444;
+  color:white;
+  font-size:0.85rem;
+  padding:4px 8px;
+  border-radius:999px;
+  font-weight:600;
+}
+
+/* acciones del header */
+.actions { display:flex; gap:8px; align-items:center; }
+.search {
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid var(--card-border);
+  outline:none;
+}
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--card-border);
+}
+
+/* filtros */
+.notif-filters { display:flex; gap:8px; padding: 8px 0 0 0; }
+.notif-filters button {
+  background: transparent;
+  border: none;
+  padding:8px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  color: var(--muted);
+}
+.notif-filters button.active {
+  background: rgba(45,137,255,0.08);
+  color: var(--accent);
+  font-weight:600;
+  border: 1px solid rgba(45,137,255,0.06);
+}
+
+/* lista */
+.notif-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 6px;
+}
+
+/* vacía */
+.empty { text-align:center; color:var(--muted); padding:30px 10px; }
+
+/* lista estilo */
+ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; }
+
+li {
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:12px;
+  border-radius:10px;
+  border: 1px solid transparent;
+  transition: background .12s ease, box-shadow .12s ease;
+}
+li:hover { background:#fbfdff; box-shadow:0 6px 18px rgba(12,18,30,0.03); transform: translateY(-2px); }
+li.unread { background: linear-gradient(90deg, rgba(45,137,255,0.03), rgba(124,58,237,0.01)); border-color: rgba(45,137,255,0.06); }
+
+.n-avatar { width:56px; height:56px; border-radius:10px; object-fit:cover; }
+
+.n-body { flex:1; cursor: pointer; }
+.n-top { display:flex; justify-content:space-between; gap:8px; align-items:flex-start; }
+.n-title { font-weight:600; color:#0f172a; }
+.n-time { font-size:0.8rem; color:var(--muted); min-width:40px; text-align:right; }
+.n-text { color:#475569; margin-top:6px; font-size:0.95rem; }
+
+/* acciones por notificación */
+.n-actions { display:flex; flex-direction:column; gap:6px; }
+.n-actions .icon { background: transparent; border: none; cursor:pointer; padding:6px; color:var(--muted); }
+
+/* load more */
+.load-more { display:flex; justify-content:center; padding:12px; }
+.load-more .btn { background: transparent; border: 1px solid var(--card-border); color: var(--accent); padding:8px 14px; border-radius:8px; }
+
+/* loading */
+.loading-card { padding: 18px; }
+
+/* responsive */
+@media (max-width:720px) {
+  .notif-root { padding: 12px; }
+  .n-avatar { width:48px; height:48px; }
+  .notif-filters { overflow-x:auto; gap:6px; }
+}

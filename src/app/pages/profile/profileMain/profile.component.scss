@@ -181,3 +181,51 @@
     min-width: 100%;
   }
 }
+
+/* ===== Estilos añadidos: posts laterales ===== */
+.side-posts {
+  margin-top: 18px;
+  border-top: 1px solid #eef2f7;
+  padding-top: 12px;
+}
+
+.side-posts h4 {
+  margin: 6px 0 10px 0;
+  color: #111827;
+  font-size: 1rem;
+}
+
+.side-post-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+
+.side-post-item img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.side-post-item:hover {
+  transform: translateX(4px);
+}
+
+.side-post-caption p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.1;
+}
+
+/* Pequeños ajustes visuales para cuando no hay posts */
+.no-posts {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+}

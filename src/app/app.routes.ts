@@ -38,6 +38,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/profile/Profile.routes').then((m) => m.ProfileRoutes),
       },
+       {
+        path: 'notifications',
+        loadChildren: () =>
+          import('./pages/notifications/notifications.routes').then((m) => m.NotificationsRoutes),
+      },
+
     ],
   },
   {

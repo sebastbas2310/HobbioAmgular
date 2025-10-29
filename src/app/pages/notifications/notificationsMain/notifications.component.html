@@ -1,1 +1,59 @@
-<p>notifications works!</p>
+<div class="notif-root" *ngIf="!loading; else loadingTpl">
+  <div class="notif-header">
+    <div class="left">
+      <h2>Notificaciones</h2>
+      <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+    </div>
+
+    <div class="actions">
+      <input class="search" type="text" placeholder="Buscar notificaciones..." [(ngModel)]="search" (input)="page = 1; applyPagination()" />
+      <button class="btn ghost" (click)="markAllAsRead()" title="Marcar todo como leído">Marcar todo leído</button>
+      <button class="btn ghost" (click)="clearAll()" title="Borrar todo">Limpiar</button>
+    </div>
+  </div>
+
+  <div class="notif-filters">
+    <button [class.active]="filter==='all'" (click)="setFilter('all')">Todas</button>
+    <button [class.active]="filter==='unread'" (click)="setFilter('unread')">No leídas</button>
+    <button [class.active]="filter==='mention'" (click)="setFilter('mention')">Menciones</button>
+    <button [class.active]="filter==='activity'" (click)="setFilter('activity')">Actividad</button>
+    <button [class.active]="filter==='system'" (click)="setFilter('system')">Sistema</button>
+  </div>
+
+  <div class="notif-list">
+    <div *ngIf="visibleNotifications.length === 0" class="empty">
+      <p>No hay notificaciones que mostrar.</p>
+      <small>Comprueba el filtro o prueba a recargar la página.</small>
+    </div>
+
+    <ul>
+      <li *ngFor="let n of visibleNotifications" [class.unread]="!n.read">
+        <img class="n-avatar" [src]="n.avatar" alt="avatar" />
+        <div class="n-body" (click)="openNotification(n)">
+          <div class="n-top">
+            <div class="n-title">{{ n.title }}</div>
+            <div class="n-time">{{ formatTime(n.time) }}</div>
+          </div>
+          <div class="n-text">{{ n.body }}</div>
+        </div>
+
+        <div class="n-actions">
+          <button class="icon" (click)="toggleRead(n)" [title]="n.read ? 'Marcar como no leído' : 'Marcar como leído'">
+            {{ n.read ? '◻' : '●' }}
+          </button>
+          <button class="icon" (click)="deleteNotification(n)" title="Eliminar">🗑️</button>
+        </div>
+      </li>
+    </ul>
+
+    <div class="load-more" *ngIf="(notifications | slice:0: (perPage*page)).length < (notifications | slice:0:1000).length">
+      <button class="btn" (click)="loadMore()">Cargar más</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading-card">
+    <p>Cargando notificaciones...</p>
+  </div>
+</ng-template>

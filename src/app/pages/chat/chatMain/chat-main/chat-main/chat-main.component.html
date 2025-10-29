@@ -1,1 +1,128 @@
-<p>chat-main works!</p>
+<div class="chat-root" *ngIf="!loading; else loadingTpl">
+  <div class="chat-layout">
+
+    <!-- SIDEBAR: CONTACTS -->
+    <aside class="sidebar" [class.collapsed]="!showSidebar">
+      <div class="sidebar-header">
+        <div class="me">
+          <img class="avatar-me" [src]="currentUser.avatar" alt="mi avatar" />
+          <div class="me-meta">
+            <div class="me-name">{{ currentUser.name }}</div>
+            <div class="me-sub">Chats</div>
+          </div>
+        </div>
+        <button class="toggle-btn" (click)="showSidebar = !showSidebar" title="Ocultar/Mostrar contactos">
+          ☰
+        </button>
+      </div>
+
+      <div class="search-wrap">
+        <input type="text" placeholder="Buscar contactos..." [(ngModel)]="contactSearch" (input)="filterContacts()" />
+      </div>
+
+      <ul class="contacts-list">
+        <li *ngFor="let c of filteredContacts" (click)="selectContact(c)" [class.active]="c.id === selectedContactId">
+          <img class="contact-avatar" [src]="c.avatar" alt="avatar" />
+          <div class="contact-meta">
+            <div class="contact-top">
+              <span class="contact-name">{{ c.name }}</span>
+              <span class="contact-time">{{ formatLastTime(c.lastTime) }}</span>
+            </div>
+            <div class="contact-bottom">
+              <span class="contact-last">{{ c.lastMessage }}</span>
+              <span class="dot" [class.online]="c.online"></span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- MAIN CHAT -->
+    <div class="chat-card">
+
+      <!-- Header del chat -->
+      <header class="chat-header">
+        <div class="left">
+          <img class="avatar" [src]="otherUser.avatar" alt="avatar" />
+          <div class="meta">
+            <div class="name-row">
+              <h3 class="name">{{ otherUser.name }}</h3>
+              <span class="dot" [class.online]="otherUser.online"></span>
+            </div>
+            <p class="subtitle">Activo ahora • Respuestas rápidas</p>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="icon-btn" title="Buscar">🔍</button>
+          <button class="icon-btn" title="Información">ℹ️</button>
+        </div>
+      </header>
+
+      <!-- Mensajes -->
+      <div class="chat-body" #scrollMe>
+        <div *ngFor="let m of messages" class="message-row" [ngClass]="{'mine': isMine(m), 'theirs': !isMine(m)}">
+          <div class="msg-avatar" *ngIf="!isMine(m)">
+            <img [src]="m.avatar" alt="avatar" />
+          </div>
+
+          <div class="msg-bubble">
+            <div *ngIf="m.image" class="bubble-image" (click)="$event.stopPropagation()">
+              <img [src]="m.image" alt="adjunta" />
+            </div>
+
+            <p class="bubble-text" *ngIf="m.text">{{ m.text }}</p>
+
+            <div class="bubble-footer">
+              <span class="time">{{ formatHour(m.time) }}</span>
+              <span class="status" *ngIf="isMine(m)">
+                <svg *ngIf="m.read" viewBox="0 0 24 24" class="icon-read"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                <svg *ngIf="!m.read" viewBox="0 0 24 24" class="icon-sent"><path d="M21 12v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="msg-avatar" *ngIf="isMine(m)">
+            <img [src]="m.avatar" alt="avatar" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Composer -->
+      <footer class="chat-composer">
+        <div class="left-actions">
+          <button class="attach-btn" (click)="toggleAttachments()" title="Adjuntar">📎</button>
+        </div>
+
+        <div class="input-wrap">
+          <input
+            type="text"
+            placeholder="Escribe un mensaje..."
+            [(ngModel)]="newMessageText"
+            (keydown.enter)="sendMessage()"
+            aria-label="Escribe un mensaje"
+          />
+        </div>
+
+        <div class="right-actions">
+          <button class="emoji-btn" title="Emoji" (click)="addEmoji('😊')">🙂</button>
+          <button class="send-btn" [class.sending]="sending" (click)="sendMessage()" [disabled]="!newMessageText.trim()">
+            Enviar
+          </button>
+        </div>
+      </footer>
+
+      <!-- Panel de attachments (simulado) -->
+      <div class="attachments-panel" *ngIf="showAttachments">
+        <button class="attach-card" (click)="attachImage()">📷 Foto aleatoria</button>
+        <button class="attach-card" (click)="attachImage()">🖼️ Imagen</button>
+        <button class="attach-card" (click)="attachImage()">📎 Archivo (simulado)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading-placeholder card">
+    <p>Cargando chat…</p>
+  </div>
+</ng-template>
