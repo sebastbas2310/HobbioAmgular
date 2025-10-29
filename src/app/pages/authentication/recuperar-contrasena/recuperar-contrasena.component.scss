@@ -1,0 +1,138 @@
+/* Recuperar contraseña — estilo limpio, centrado y responsive */
+
+:root {
+  --bg: #ffffff;
+  --card-bg: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-2: #1e40af;
+  --danger: #ef4444;
+}
+
+/* Root: ocupa espacio razonable; si quieres full-bleed ajusta en global */
+.recover-root {
+  width: 100%;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: var(--bg);
+  box-sizing: border-box;
+}
+
+.recover-card {
+  width: 100%;
+  max-width: 720px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Titles */
+.title {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #0f172a;
+}
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Form */
+.form { display:flex; flex-direction:column; gap:10px; margin-top: 6px; }
+
+.label { font-size: 0.9rem; color: #374151; margin-bottom: 6px; }
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e6eefb;
+  background: #fbfdff;
+  outline: none;
+  font-size: 0.95rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 6px 20px rgba(37,99,235,0.08);
+}
+
+/* password row */
+.password-row {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.password-row input { flex: 1; }
+.eye {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+/* Field errors */
+.field-error { color: var(--danger); font-size: 0.85rem; margin-top: 4px; }
+
+/* Strength bar */
+.pw-strength { display:flex; align-items:center; gap:8px; margin-top:4px; }
+.pw-strength .bar {
+  width: 38px;
+  height: 6px;
+  border-radius: 6px;
+  background: #e6eefb;
+  transition: background .12s ease;
+}
+.pw-strength .bar.on { background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+.pw-strength .muted { color: var(--muted); font-size: 0.82rem; }
+
+/* Actions row */
+.actions {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+.actions .right-actions { display:flex; gap:10px; align-items:center; }
+
+/* Buttons */
+.btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+.btn.primary {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: white;
+  box-shadow: 0 8px 18px rgba(37,99,235,0.12);
+}
+.btn.ghost {
+  background: transparent;
+  border: 1px solid #eef2f7;
+  color: var(--muted);
+}
+
+/* Note */
+.note { color: var(--muted); font-size: 0.9rem; margin-top: 6px; }
+
+/* Responsive */
+@media (max-width: 720px) {
+  .recover-card { padding: 18px; max-width: 100%; }
+  .pw-strength { flex-direction: row; }
+  .actions { flex-direction: column; align-items: stretch; gap: 8px; }
+}

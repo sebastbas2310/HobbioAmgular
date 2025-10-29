@@ -1,0 +1,81 @@
+<div class="recover-root">
+  <div class="recover-card">
+    <h1 class="title">Recuperar contraseña</h1>
+    <p class="subtitle">Introduce tu correo para recibir un código y restablecer tu contraseña.</p>
+
+    <!-- Paso 1: solicitar código -->
+    <form *ngIf="step === 1" [formGroup]="requestForm" (ngSubmit)="requestCode()" class="form">
+      <label class="label">Correo electrónico</label>
+      <input type="email" formControlName="email" placeholder="tu@correo.com" />
+      <div class="field-error" *ngIf="rf['email'].touched && rf['email'].invalid">
+        <span *ngIf="rf['email'].errors?.['required']">El correo es obligatorio.</span>
+        <span *ngIf="rf['email'].errors?.['email']">Introduce un correo válido.</span>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn ghost" (click)="goToLogin()">Volver al inicio</button>
+        <button type="submit" class="btn primary" [disabled]="requestForm.invalid || loading">
+          {{ loading ? 'Enviando...' : 'Enviar código' }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Paso 2: restablecer con código -->
+    <form *ngIf="step === 2" [formGroup]="resetForm" (ngSubmit)="resetPassword()" class="form">
+      <label class="label">Correo electrónico</label>
+      <input type="email" formControlName="email" placeholder="tu@correo.com" />
+
+      <label class="label">Código de verificación</label>
+      <input type="text" formControlName="code" placeholder="Código que recibiste" />
+      <div class="field-error" *ngIf="tf['code'].touched && tf['code'].invalid">
+        <span *ngIf="tf['code'].errors?.['required']">Ingresa el código.</span>
+        <span *ngIf="tf['code'].errors?.['minlength']">Código muy corto.</span>
+      </div>
+
+      <label class="label">Nueva contraseña</label>
+      <div class="password-row">
+        <input [type]="showPassword ? 'text' : 'password'" formControlName="newPassword" placeholder="Mínimo 8 caracteres" />
+        <button type="button" class="eye" (click)="toggleShowPassword()">
+          {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+        </button>
+      </div>
+      <div class="field-error" *ngIf="tf['newPassword'].touched && tf['newPassword'].invalid">
+        <span *ngIf="tf['newPassword'].errors?.['required']">La contraseña es obligatoria.</span>
+        <span *ngIf="tf['newPassword'].errors?.['minlength']">Debe tener al menos 8 caracteres.</span>
+      </div>
+
+      <div class="pw-strength">
+        <div class="bar" [class.on]="passwordStrength(tf['newPassword'].value) >= 1"></div>
+        <div class="bar" [class.on]="passwordStrength(tf['newPassword'].value) >= 2"></div>
+        <div class="bar" [class.on]="passwordStrength(tf['newPassword'].value) >= 3"></div>
+        <div class="bar" [class.on]="passwordStrength(tf['newPassword'].value) >= 4"></div>
+        <small class="muted">Fuerza: {{ passwordStrength(tf['newPassword'].value) }} / 4</small>
+      </div>
+
+      <label class="label">Confirmar contraseña</label>
+      <div class="password-row">
+        <input [type]="showConfirm ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Repite la contraseña" />
+        <button type="button" class="eye" (click)="toggleShowConfirm()">
+          {{ showConfirm ? 'Ocultar' : 'Mostrar' }}
+        </button>
+      </div>
+      <div class="field-error" *ngIf="resetForm.errors?.['passwordsMismatch'] && (tf['confirmPassword'].touched || tf['newPassword'].touched)">
+        Las contraseñas no coinciden.
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn ghost" (click)="backToRequest()">Volver</button>
+        <div class="right-actions">
+          <button type="button" class="btn ghost" (click)="resendCode()" [disabled]="loading">Reenviar código</button>
+          <button type="submit" class="btn primary" [disabled]="resetForm.invalid || loading">
+            {{ loading ? 'Procesando...' : 'Restablecer contraseña' }}
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div class="note">
+      <small>Si no recibes el correo, revisa tu carpeta de spam o intenta reenviar el código.</small>
+    </div>
+  </div>
+</div>

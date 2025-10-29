@@ -43,6 +43,7 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/notifications/notifications.routes').then((m) => m.NotificationsRoutes),
       },
+     
 
     ],
   },
