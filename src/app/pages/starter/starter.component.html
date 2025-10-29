@@ -1,24 +1,78 @@
-<div class="row">
-  <div class="col-lg-8">
-    <app-sales-overview></app-sales-overview>
-  </div>
-  <div class="col-lg-4">
-    <app-yearly-breakup></app-yearly-breakup>
-    <app-monthly-earnings></app-monthly-earnings>
-  </div>
-</div>
+<div class="dashboard-container">
+  <!-- ===== FEED PRINCIPAL ===== -->
+  <div
+    class="feed"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="300"
+    (scrolled)="onScroll()"
+  >
+    <div class="post" *ngFor="let post of posts">
+      <!-- 🧑‍ Header del post -->
+      <div class="post-header">
+        <img [src]="post.avatar" alt="avatar" class="avatar" />
+        <div>
+          <h3>{{ post.user }}</h3>
+          <span>{{ '@' + post.handle }}</span>
+        </div>
+      </div>
 
-<div class="row">
-  <div class="col-lg-4">
-    <app-recent-transactions></app-recent-transactions>
-  </div>
-  <div class="col-lg-8">
-    <app-product-performance></app-product-performance>
-  </div>
-</div>
+      <!-- 💬 Contenido -->
+      <p class="post-content">{{ post.content }}</p>
 
-<div class="row">
-  <div class="col-12">
-    <app-blog-card></app-blog-card>
+      <!-- 🖼️ Imagen si existe -->
+      <img
+        *ngIf="post.image"
+        [src]="post.image"
+        alt="post image"
+        class="post-image"
+      />
+
+      <!-- ❤️ Acciones -->
+      <div class="post-actions">
+        <button mat-icon-button>
+          <mat-icon>favorite_border</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon>chat_bubble_outline</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon>share</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- ⏳ Cargando -->
+    <div class="loading" *ngIf="loading">
+      <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+      <p>Cargando más publicaciones...</p>
+    </div>
+  </div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <div class="sidebar">
+    <!-- 🔹 Comunidades recomendadas -->
+    <div class="card recomendaciones">
+      <h4>Comunidades recomendadas</h4>
+      <div *ngFor="let com of comunidades" class="reco-item">
+        <img src="assets/images/avatar.png" alt="com" class="avatar" />
+        <div>
+          <strong>{{ com.nombre }}</strong>
+          <p>{{ com.descripcion }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔹 Personas que quizá conozcas -->
+    <div class="card recomendaciones">
+      <h4>Personas que quizá conozcas</h4>
+      <div *ngFor="let p of personas" class="reco-item">
+        <img [src]="p.avatar" alt="avatar" class="avatar" />
+        <div>
+          <strong>{{ p.nombre }}</strong>
+          <span>{{ '@' + p.handle }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

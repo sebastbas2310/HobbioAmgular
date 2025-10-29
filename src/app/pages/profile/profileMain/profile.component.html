@@ -1,1 +1,49 @@
-<p>profile works!</p>
+<div class="profile-page">
+
+  <!-- ===== PERFIL SUPERIOR ===== -->
+  <div class="profile-header card">
+    <img [src]="user.avatar" alt="avatar" class="avatar" />
+    <div class="profile-info">
+      <div class="header-top">
+        <h2>{{ user.name }}</h2>
+        <button class="edit-btn">Editar perfil</button>
+      </div>
+      <p class="username">{{ user.username }}</p>
+
+      <div class="stats">
+        <span><b>{{ user.postsCount }}</b> publicaciones</span>
+        <span><b>{{ user.followers }}</b> seguidores</span>
+        <span><b>{{ user.following }}</b> siguiendo</span>
+      </div>
+
+      <p class="bio">{{ user.bio }}</p>
+    </div>
+  </div>
+
+  <!-- ===== CONTENIDO PRINCIPAL ===== -->
+  <div class="content-layout">
+    
+    <!-- PUBLICACIONES -->
+    <div class="posts-section">
+      <div class="posts-grid">
+        <div class="post-card" *ngFor="let post of posts">
+          <img [src]="post.image" alt="Post" />
+          <div class="overlay">
+            <p>{{ post.caption }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMUNIDADES (isla lateral) -->
+    <div class="communities card">
+      <h3>Comunidades</h3>
+      <ul>
+        <li *ngFor="let c of communities">
+          <p class="com-name">{{ c.name }}</p>
+          <p class="com-desc">{{ c.description }}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

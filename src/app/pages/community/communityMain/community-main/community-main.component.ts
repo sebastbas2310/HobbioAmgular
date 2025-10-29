@@ -1,53 +1,64 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';  // 👈 necesario para *ngFor
-import { FormsModule } from '@angular/forms';    // 👈 necesario para [(ngModel)]
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-
-interface Comunidad {
-  id: number;
-  nombre: string;
-  descripcion: string;
-}
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-comunidades',
-  standalone: true,  // 👈 si estás usando componentes standalone
-  imports: [CommonModule, FormsModule], // 👈 agrega estos módulos aquí
+  selector: 'app-communities',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './community-main.component.html',
   styleUrls: ['./community-main.component.scss']
 })
-export class CommunityMainComponent implements OnInit {
+export class CommunitiesComponent implements OnInit {
+  searchTerm: string = '';
+  filtradas: any[] = []; // tu lista de comunidades filtradas
+  userName: string = ''; // 👈 aquí guardaremos el nombre
 
-  comunidades: Comunidad[] = [
-    { id: 1, nombre: 'los silsoneros', descripcion: 'los miembros de esta comunidad sienten mucho amor por el silson.' },
-    { id: 2, nombre: 'amantes de los libros', descripcion: 'los miembros de esta comunidad sienten mucho amor por las letras.' },
-    { id: 3, nombre: 'amantes de los perros', descripcion: 'los miembros de esta comunidad sienten mucho amor por los perros.' },
-    { id: 4, nombre: 'los marianos', descripcion: 'los miembros de esta comunidad sienten mucho amor por la bareta.' }
-  ];
+  constructor(private authService: AuthService) {}
 
-  filtradas: Comunidad[] = [];
-  searchTerm = '';
-  private search$ = new Subject<string>();
+  ngOnInit() {
+    this.loadUserName();
+    this.loadCommunities();
+  }
 
-  ngOnInit(): void {
-    this.filtradas = this.comunidades;
+  /** 🔹 Obtiene el nombre del usuario desde el backend usando el ID del token */
+  loadUserName() {
+    const user = this.authService.getUserFromToken();
 
-    // Escucha de cambios en el buscador con debounce
-    this.search$.pipe(
-      debounceTime(250),
-      distinctUntilChanged()
-    ).subscribe(term => {
-      const t = term.toLowerCase().trim();
-      this.filtradas = !t
-        ? this.comunidades
-        : this.comunidades.filter(c =>
-            c.nombre.toLowerCase().includes(t) ||
-            c.descripcion.toLowerCase().includes(t)
-          );
+    if (!user || !user.id) {
+      console.warn('No se pudo obtener el usuario desde el token');
+      return;
+    }
+
+    this.authService.getUserById(user.id).subscribe({
+      next: (userData) => {
+        this.userName = userData.user_name || 'Usuario';
+        console.log('🟢 Usuario cargado:', this.userName);
+      },
+      error: (err) => {
+        console.error('⚠️ Error al cargar usuario:', err);
+        this.userName = 'Usuario';
+      },
     });
   }
 
-  onSearchChange(value: string): void {
-    this.search$.next(value);
+  /** 🔹 Ejemplo: carga inicial de comunidades (puedes adaptarlo a tu API real) */
+  loadCommunities() {
+    // Simulación: normalmente harías un this.communityService.getAll().subscribe(...)
+    this.filtradas = [
+      { nombre: 'Gamers Unidos', descripcion: 'Comunidad para amantes de los videojuegos.' },
+      { nombre: 'Fotografía', descripcion: 'Comparte tus mejores tomas y aprende técnicas nuevas.' },
+      { nombre: 'Lectores del Café', descripcion: 'Club de lectura semanal con libros nuevos cada mes.' },
+    ];
+  }
+
+  /** 🔹 Filtrado */
+  onSearchChange(value: string) {
+    this.searchTerm = value;
+    // Aquí filtras según tu lógica (ejemplo simple):
+    this.filtradas = this.filtradas.filter(c =>
+      c.nombre.toLowerCase().includes(value.toLowerCase())
+    );
   }
 }

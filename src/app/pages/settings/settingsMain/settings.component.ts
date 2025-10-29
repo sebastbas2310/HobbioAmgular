@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { jwtDecode } from 'jwt-decode';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-settings',
@@ -22,11 +21,13 @@ export class SettingsComponent implements OnInit {
   profileForm!: FormGroup;
   editMode = false;
   loading = true;
-  userName: string = ''; // 👈 guardaremos el nombre aquí
+  userName: string = '';
+  currentRoute: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -40,11 +41,23 @@ export class SettingsComponent implements OnInit {
     });
 
     this.loadUserData();
+
+    // Guarda la ruta actual para resaltar el item activo
+    this.currentRoute = this.router.url;
+
+    // Escucha cambios de ruta para mantener el activo
+    this.router.events.subscribe(() => {
+      this.currentRoute = this.router.url;
+    });
   }
 
-  /**
-   * ✅ Cargar datos del usuario desde el backend usando el ID del token
-   */
+  // 🔹 Navegación de la barra lateral
+  navigate(route: string) {
+    this.router.navigate([route]);
+    this.currentRoute = route;
+  }
+
+  // 🔹 Cargar datos del usuario
   loadUserData() {
     const user = this.authService.getUserFromToken();
 
@@ -54,17 +67,10 @@ export class SettingsComponent implements OnInit {
       return;
     }
 
-    console.log('🟢 ID del usuario decodificado:', user.id);
-
     this.authService.getUserById(user.id).subscribe({
       next: (userData) => {
-        // Pone los datos en el formulario
         this.profileForm.patchValue(userData);
-
-        // Guarda y muestra el nombre
         this.userName = userData.user_name;
-        console.log('👤 Nombre del usuario:', this.userName);
-
         this.loading = false;
       },
       error: (err) => {
@@ -74,17 +80,12 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  /**
-   * ✅ Cambiar modo de edición
-   */
+  // 🔹 Cambiar modo de edición
   toggleEditMode() {
     this.editMode = !this.editMode;
   }
 
-  
-  /**
-   * ✅ Guardar cambios
-   */
+  // 🔹 Guardar cambios
   onSubmit() {
     if (this.profileForm.invalid) return;
 
@@ -95,7 +96,7 @@ export class SettingsComponent implements OnInit {
     }
 
     this.authService.updateUser(user.id as string, this.profileForm.value).subscribe({
-      next: (res) => {
+      next: () => {
         Swal.fire('Éxito', 'Perfil actualizado correctamente', 'success');
         this.editMode = false;
       },
@@ -106,9 +107,7 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  /**
-   * 📸 Simulación de carga de foto
-   */
+  // 🔹 Subida de foto (simulada)
   onUploadPhoto() {
     Swal.fire('Función en desarrollo', 'Aquí podrás subir una nueva foto de perfil', 'info');
   }

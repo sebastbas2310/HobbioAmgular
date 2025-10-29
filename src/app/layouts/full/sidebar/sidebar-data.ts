@@ -5,28 +5,14 @@ export const navItems: NavItem[] = [
     navCap: 'Home',
   },
   {
-    displayName: 'Dashboard',
+    displayName: 'Comunidades',
     iconName: 'layout-grid-add',
-    route: '/dashboard',
+    route: '/community',
   },
   {
-    displayName: 'Workers',
-    iconName: 'layout-grid-add',
-    route: '/workers',
-  },
-  {
-    displayName: 'Menu',
+    displayName: 'Chat',
     iconName: 'people',
-    route: '/menu',
-  },
-  {
-    displayName: 'ingredientes',
-    iconName: 'people',
-    route: '/ingredients',
-  },
-  {
-    displayName: 'Tables',
-    iconName: 'people',
-    route: '/tables',
-  },
+    route: '/chat',
+  }
+ 
 ]

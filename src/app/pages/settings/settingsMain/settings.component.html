@@ -4,12 +4,36 @@
 <aside class="settings-sidebar">
   <h2 class="settings-title">Settings</h2>
   <ul>
-    <li routerLink="/settings/profile" routerLinkActive="active">Edit Profile</li>
-    <li routerLink="/settings/password" routerLinkActive="active">Change Password</li>
-    <li routerLink="/settings/notifications" routerLinkActive="active">Notifications</li>
-    <li routerLink="/settings/privacy" routerLinkActive="active">Privacy</li>
+    <li
+      (click)="navigate('/settings/profile')"
+      [class.active]="currentRoute === '/settings/profile'"
+    >
+      Edit Profile
+    </li>
+
+    <li
+      (click)="navigate('/settings/password')"
+      [class.active]="currentRoute === '/settings/password'"
+    >
+      Change Password
+    </li>
+
+    <li
+      (click)="navigate('/settings/notifications')"
+      [class.active]="currentRoute === '/settings/notifications'"
+    >
+      Notifications
+    </li>
+
+    <li
+      (click)="navigate('/settings/privacy')"
+      [class.active]="currentRoute === '/settings/privacy'"
+    >
+      Privacy
+    </li>
   </ul>
 </aside>
+
 
 
   <!-- Main Content -->
